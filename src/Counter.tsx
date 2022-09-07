@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import './Counter.css';
 import {Button} from './components/Button';
 
@@ -15,11 +15,32 @@ function Counter() {
     // mode === true - режим счетчика (видим значение)
 
 
+    useEffect(() => {
+            let startValueAsString = localStorage.getItem('startValue')
+            if (startValueAsString) {
+                let newStartValue = JSON.parse(startValueAsString)
+                setStartValue(newStartValue)
+            }
+        }, [])
+
+    useEffect(() => {
+            let maxValueAsString = localStorage.getItem('maxValue')
+            if (maxValueAsString) {
+                let newMaxValue = JSON.parse(maxValueAsString)
+                setMaxValue(newMaxValue)
+            }
+        }, [])
+
+
+    useEffect(() => localStorage.setItem('startValue', JSON.stringify(startValue)), [startValue])
+
+    useEffect(() => localStorage.setItem('maxValue', JSON.stringify(maxValue)), [maxValue])
+
+
     const increaseValue = () => {
         if (value < maxValue) {
             setValue(value + 1)
-        }
-        else return
+        } else return
     }
 
     const resetValue = () => setValue(startValue)
